@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date    = '2008-10-26'
   
   s.summary = "Most awesome pagination solution for Rails"
-  s.description = "The will_paginate library provides a simple, yet powerful and extensible API for ActiveRecord pagination and rendering of pagination links in ActionView templates."
+  s.description = "The will_paginate library provides a simple, yet powerful and extensible API for ActiveRecord pagination and rendering of pagination links in ActionView templates. [Experimental: addition of prev/next rel navigation for XML rendering]"
   
   s.authors  = ['Mislav Marohnić', 'PJ Hyett']
   s.email    = 'mislav.marohnic@gmail.com'
