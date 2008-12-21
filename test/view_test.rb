@@ -165,6 +165,64 @@ class ViewTest < WillPaginate::ViewTestCase
     end
   end
 
+  ## XML rendering ##
+
+  def test_xml_pagination_output_with_prev_and_next
+    paginate({:page => 2, :per_page => 5, :total_entries => 22}, :xml => true)
+    expected = <<-XML
+  <link rel="next" href="/foo/bar?page=3" />
+  <link rel="prev" href="/foo/bar?page=1" />
+    XML
+    assert_dom_equal expected, @html_result
+  end
+  
+  def test_xml_pagination_output_with_prev_only
+    paginate({:page => 2, :per_page => 5, :total_entries => 10}, :xml => true)
+    expected = <<-XML
+  <link rel="prev" href="/foo/bar?page=1" />
+    XML
+    assert_dom_equal expected, @html_result
+  end
+
+  def test_xml_pagination_output_with_next_only
+    paginate({:page => 1, :per_page => 5, :total_entries => 10}, :xml => true)
+    expected = <<-XML
+  <link rel="next" href="/foo/bar?page=2" />
+    XML
+    assert_dom_equal expected, @html_result
+  end
+
+  def test_xml_pagination_output_with_single_page
+    paginate({:page => 1, :per_page => 5, :total_entries => 5}, :xml => true)
+    expected = ""
+    assert_dom_equal expected, @html_result
+  end
+
+  def test_xml_pagination_output_with_builder                        
+    expected = <<-XML   
+    <navigation>
+        <link rel="next" href="/foo/bar?page=3" />
+        <link rel="prev" href="/foo/bar?page=1" />
+    </navigation>
+    XML
+    xml = Builder::XmlMarkup.new(:indent => 4, :margin => 1)
+    xml.navigation do
+      paginate({:page => 2, :per_page => 5, :total_entries => 22}, {:xml => true, :builder => xml})
+    end
+    assert_dom_equal expected, xml.target!
+  end
+
+  def test_xml_pagination_output_with_buffer                        
+    buffer ="    Result: \n"
+    paginate({:page => 2, :per_page => 5, :total_entries => 22}, {:xml => true, :buffer => buffer})
+    expected = <<-XML
+    Result: 
+  <link rel="next" href="/foo/bar?page=3" />
+  <link rel="prev" href="/foo/bar?page=1" />
+    XML
+    assert_dom_equal expected, buffer
+  end
+
   ## other helpers ##
   
   def test_paginated_section

@@ -30,9 +30,10 @@ module WillPaginate
       :separator      => ' ', # single space is friendly to spiders and non-graphic browsers
       :param_name     => :page,
       :params         => nil,
-      :renderer       => 'WillPaginate::LinkRenderer',
+      :renderer       => nil,
       :page_links     => true,
-      :container      => true
+      :container      => true,
+      :xml            => false
     }
     mattr_reader :pagination_options
 
@@ -104,6 +105,7 @@ module WillPaginate
       end
       
       # get the renderer instance
+      options[:renderer] ||= options[:xml] ? 'WillPaginate::XmlLinkRenderer' : 'WillPaginate::LinkRenderer'
       renderer = case options[:renderer]
       when String
         options[:renderer].to_s.constantize.new
@@ -111,7 +113,9 @@ module WillPaginate
         options[:renderer].new
       else
         options[:renderer]
-      end
+      end                      
+      
+      
       # render HTML for pagination
       renderer.prepare collection, options, self
       renderer.to_html
@@ -251,7 +255,11 @@ module WillPaginate
     end
     
   protected
-
+  
+    def options
+      @options
+    end
+  
     # Collects link items for visible page numbers.
     def windowed_links
       prev = nil
@@ -386,5 +394,15 @@ module WillPaginate
         end
       end
     end
+  end
+
+  class XmlLinkRenderer < LinkRenderer
+    def to_html
+      buffer = options[:buffer] || ""
+      xml = options[:builder] || Builder::XmlMarkup.new(:target => buffer, :indent => 2, :margin => 1)
+      xml.link :rel => 'next', :href => url_for(@collection.next_page) unless @collection.next_page.nil?
+      xml.link :rel => 'prev', :href => url_for(@collection.previous_page) unless @collection.previous_page.nil?
+      xml.target!
+    end  
   end
 end
