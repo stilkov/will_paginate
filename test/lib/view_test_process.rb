@@ -17,8 +17,12 @@ end
 ActionController::Base.perform_caching = false
 
 class WillPaginate::ViewTestCase < Test::Unit::TestCase
-  include ActionController::TestCase::Assertions
-  include ActiveSupport::Testing::Deprecation
+  if defined?(ActionController::TestCase::Assertions)
+    include ActionController::TestCase::Assertions
+  end
+  if defined?(ActiveSupport::Testing::Deprecation)
+    include ActiveSupport::Testing::Deprecation
+  end
 
   def setup
     super

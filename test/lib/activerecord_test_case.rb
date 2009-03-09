@@ -3,7 +3,9 @@ require 'lib/activerecord_test_connector'
 class ActiveRecordTestCase < Test::Unit::TestCase
   include ActiveSupport::Testing::SetupAndTeardown
 
-  include ActiveRecord::TestFixtures
+  if defined?(ActiveRecord::TestFixtures)
+    include ActiveRecord::TestFixtures
+  end
   # Set our fixture path
   if ActiveRecordTestConnector.able_to_connect
     self.fixture_path = File.join(File.dirname(__FILE__), '..', 'fixtures')
