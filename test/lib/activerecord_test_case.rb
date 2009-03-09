@@ -1,7 +1,9 @@
 require 'lib/activerecord_test_connector'
 
 class ActiveRecordTestCase < Test::Unit::TestCase
-  include ActiveSupport::Testing::SetupAndTeardown
+  if defined?(ActiveSupport::Testing::SetupAndTeardown)
+    include ActiveSupport::Testing::SetupAndTeardown
+  end
 
   if defined?(ActiveRecord::TestFixtures)
     include ActiveRecord::TestFixtures
