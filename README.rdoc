@@ -1,5 +1,41 @@
 = WillPaginate
 
+== This fork
+
+I needed to paginate an Atom feed, and didn't want to build it myself (specifically because
+I'm rendering the same content as HTML, anyway). So this fork adds pagination support for XML, usable
+in Atom feeds or other XML resource representations.
+
+Usage exampel:
+
+	xml.instruct! :xml, :encoding => "UTF-8"
+	xml.feed :xmlns => 'http://www.w3.org/2005/Atom', 'xml:base' => base_uri, 'xml:lang' => 'en-us' do
+	  xml.link :rel => 'self', :type => 'application/atom+xml', :href => request.url
+	  xml.link :rel => 'alternate', :type => 'text/html', :href => orders_url
+	  will_paginate(@orders, :xml => true, :builder => xml)
+	  xml.id orders_url
+	  xml.title 'Feed for OM order updates'
+	  xml.updated Order.maximum(:updated_at).iso8601
+	  for order in @orders do
+	    ... # render entries
+	  end
+	end
+
+In other words, use will_paginate as you would use it in HTML (the controller code can stay 
+unchanged), and add the :xml => true option. This will make will_paginate return an XML string
+representation. Alternatively, you can pass in an XML builder and it will use that instead.
+
+Works with Rails 2.3.2.
+
+Note that my experience with git and GitHub is limited, I'm happy about suggestions on how to
+make this more useful.
+
+Below you'll find the original description of will_paginate.
+
+stilkov, http://www.innoq.com/blog/st/
+
+== The original
+
 Pagination is just limiting the number of records displayed. Why should you let
 it get in your way while developing, then? This plugin makes magic happen. Did
 you ever want to be able to do just this on a model:
