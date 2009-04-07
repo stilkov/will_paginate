@@ -240,16 +240,16 @@ class FinderTest < ActiveRecordTestCase
     end
   end
 
-  def test_paginate_in_named_scope_on_hmt_association
-    project = projects(:active_record)
-    expected = [replies(:brave)]
-    
-    assert_queries(2) do
-      entries = project.replies.recent.paginate :page => 1, :per_page => 1
-      assert_equal expected, entries
-      assert_equal 1, entries.total_entries, 'only one reply should be found'
-    end
-  end
+#  def test_paginate_in_named_scope_on_hmt_association
+#    project = projects(:active_record)
+#    expected = [replies(:brave)]
+#    
+#    assert_queries(2) do
+#      entries = project.replies.recent.paginate :page => 1, :per_page => 1
+#      assert_equal expected, entries
+#      assert_equal 1, entries.total_entries, 'only one reply should be found'
+#    end
+#  end
 
   def test_paginate_in_named_scope_on_has_many_association
     project = projects(:active_record)
