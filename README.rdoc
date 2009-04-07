@@ -35,7 +35,7 @@ This will render something like this:
 
 In other words, use will_paginate as you would use it in HTML (the controller code can stay 
 unchanged), and add the :xml => true option. This will make will_paginate return an XML string
-representation containing appropriate &lt;link rel=...> elements. Alternatively, you can pass
+representation containing appropriate <link rel=...> elements. Alternatively, you can pass
 in an XML builder and it will use that instead.
 
 Works with Rails 2.3.2.
@@ -47,7 +47,7 @@ Note I had to comment out one of the original (unrelated) tests because of a pro
 
 Below you'll find the original description of will_paginate.
 
-stilkov, http://www.innoq.com/blog/st/
+stilkov, http://www.innoq.com/blog/st
 
 == The original
 
