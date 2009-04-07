@@ -6,7 +6,7 @@ I needed to paginate an Atom feed, and didn't want to build it myself (specifica
 I'm rendering the same content as HTML, anyway). So this fork adds pagination support for XML, usable
 in Atom feeds or other XML resource representations.
 
-Usage exampel:
+Usage example:
 
 	xml.instruct! :xml, :encoding => "UTF-8"
 	xml.feed :xmlns => 'http://www.w3.org/2005/Atom', 'xml:base' => base_uri, 'xml:lang' => 'en-us' do
@@ -21,14 +21,29 @@ Usage exampel:
 	  end
 	end
 
+This will render something like this:
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-us" xml:base="http://om.example.com/">
+	  <link type="application/atom+xml" rel="self" href="http://om.example.com/orders.atom?page=2"/>
+	  <link type="text/html" rel="alternate" href="http://om.example.com/orders"/>
+	  <link rel="next" href="/orders.atom?page=3"/>
+	  <link rel="prev" href="/orders.atom?page=1"/>
+	  <id>http://om.example.com/orders</id>
+	  <title>Feed for OM order updates</title>
+	  <updated>2009-04-07T07:44:56Z</updated>
+
 In other words, use will_paginate as you would use it in HTML (the controller code can stay 
 unchanged), and add the :xml => true option. This will make will_paginate return an XML string
-representation. Alternatively, you can pass in an XML builder and it will use that instead.
+representation containing appropriate &lt;link rel=...> elements. Alternatively, you can pass
+in an XML builder and it will use that instead.
 
 Works with Rails 2.3.2.
 
 Note that my experience with git and GitHub is limited, I'm happy about suggestions on how to
 make this more useful.
+
+Note I had to comment out one of the original (unrelated) tests because of a problem with SQLite.
 
 Below you'll find the original description of will_paginate.
 
