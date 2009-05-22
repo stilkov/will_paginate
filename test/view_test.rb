@@ -167,19 +167,19 @@ class ViewTest < WillPaginate::ViewTestCase
 
   ## XML rendering ##
 
-  def test_xml_pagination_output_with_prev_and_next
+  def test_xml_pagination_output_with_previous_and_next
     paginate({:page => 2, :per_page => 5, :total_entries => 22}, :xml => true)
     expected = <<-XML
   <link rel="next" href="/foo/bar?page=3" />
-  <link rel="prev" href="/foo/bar?page=1" />
+  <link rel="previous" href="/foo/bar?page=1" />
     XML
     assert_dom_equal expected, @html_result
   end
   
-  def test_xml_pagination_output_with_prev_only
+  def test_xml_pagination_output_with_previous_only
     paginate({:page => 2, :per_page => 5, :total_entries => 10}, :xml => true)
     expected = <<-XML
-  <link rel="prev" href="/foo/bar?page=1" />
+  <link rel="previous" href="/foo/bar?page=1" />
     XML
     assert_dom_equal expected, @html_result
   end
@@ -202,7 +202,7 @@ class ViewTest < WillPaginate::ViewTestCase
     expected = <<-XML   
     <navigation>
         <link rel="next" href="/foo/bar?page=3" />
-        <link rel="prev" href="/foo/bar?page=1" />
+        <link rel="previous" href="/foo/bar?page=1" />
     </navigation>
     XML
     xml = Builder::XmlMarkup.new(:indent => 4, :margin => 1)
@@ -218,7 +218,34 @@ class ViewTest < WillPaginate::ViewTestCase
     expected = <<-XML
     Result: 
   <link rel="next" href="/foo/bar?page=3" />
-  <link rel="prev" href="/foo/bar?page=1" />
+  <link rel="previous" href="/foo/bar?page=1" />
+    XML
+    assert_dom_equal expected, buffer
+  end
+
+  def test_xml_pagination_output_with_first                        
+    buffer ="    Result: \n"
+    paginate({:page => 2, :per_page => 5, :total_entries => 22},
+             {:xml => true, :first => true, :buffer => buffer})
+    expected = <<-XML
+    Result: 
+  <link rel="first" href="/foo/bar?page=1" />
+  <link rel="next" href="/foo/bar?page=3" />
+  <link rel="previous" href="/foo/bar?page=1" />
+    XML
+    assert_dom_equal expected, buffer
+  end
+
+  def test_xml_pagination_output_with_first_and_last                        
+    buffer ="    Result: \n"
+    paginate({:page => 2, :per_page => 5, :total_entries => 22},
+             {:xml => true, :first => true, :last => true, :buffer => buffer})
+    expected = <<-XML
+    Result: 
+  <link rel="first" href="/foo/bar?page=1" />
+  <link rel="next" href="/foo/bar?page=3" />
+  <link rel="previous" href="/foo/bar?page=1" />
+  <link rel="last" href="/foo/bar?page=5" />
     XML
     assert_dom_equal expected, buffer
   end

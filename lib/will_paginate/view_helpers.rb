@@ -33,7 +33,9 @@ module WillPaginate
       :renderer       => nil,
       :page_links     => true,
       :container      => true,
-      :xml            => false
+      :xml            => false,
+      :first          => false,
+      :last           => false
     }
     mattr_reader :pagination_options
 
@@ -412,8 +414,10 @@ module WillPaginate
     def to_html
       buffer = options[:buffer] || ""
       xml = options[:builder] || Builder::XmlMarkup.new(:target => buffer, :indent => 2, :margin => 1)
+      xml.link :rel => 'first', :href => url_for(1) if options[:first]
       xml.link :rel => 'next', :href => url_for(@collection.next_page) unless @collection.next_page.nil?
-      xml.link :rel => 'prev', :href => url_for(@collection.previous_page) unless @collection.previous_page.nil?
+      xml.link :rel => 'previous', :href => url_for(@collection.previous_page) unless @collection.previous_page.nil?
+      xml.link :rel => 'last', :href => url_for(WillPaginate::ViewHelpers.total_pages_for_collection(@collection)) if options[:last]
       xml.target!
     end  
   end

@@ -28,7 +28,7 @@ This will render something like this:
 	  <link type="application/atom+xml" rel="self" href="http://om.example.com/orders.atom?page=2"/>
 	  <link type="text/html" rel="alternate" href="http://om.example.com/orders"/>
 	  <link rel="next" href="/orders.atom?page=3"/>
-	  <link rel="prev" href="/orders.atom?page=1"/>
+	  <link rel="previous" href="/orders.atom?page=1"/>
 	  <id>http://om.example.com/orders</id>
 	  <title>Feed for OM order updates</title>
 	  <updated>2009-04-07T07:44:56Z</updated>
